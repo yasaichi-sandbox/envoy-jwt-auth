@@ -25,6 +25,10 @@ static_resources:
                             prefix: '/'
                           route:
                             cluster: upstream_cluster
+                  request_headers_to_add:
+                    - header:
+                        key: Authorization
+                        value: Basic base64EncodedCredentials
                 http_filters:
                   - name: envoy.filters.http.jwt_authn
                     typed_config:
