@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  proxy:
+    image: envoyproxy/envoy:dev-850c7f10cbf5e1132de4eed6b5131d2928ddb95f
+    container_name: proxy
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+  upstream:
+    image: ealen/echo-server:latest
+    container_name: upstream
+    ports:
+      - '3000:80'
+    restart: unless-stopped
