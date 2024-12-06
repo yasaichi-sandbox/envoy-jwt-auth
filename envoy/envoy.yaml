@@ -50,20 +50,12 @@ static_resources:
                         - match:
                             prefix: '/'
                           requires:
-                            provider_name: 'auth0'
+                            provider_name: 'landlog'
                   - name: envoy.filters.http.lua
                     typed_config:
                       '@type': type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
-                      inline_code: |
-                        function envoy_on_request(request_handle)
-                          local meta = request_handle:streamInfo():dynamicMetadata()
-                          for key, value in pairs(meta) do
-                            if(value.jwt_payload.scope == nil or string.find(value.jwt_payload.scope, "foo") == nil)
-                            then
-                              request_handle:respond({[":status"] = "403",},"JWT validation failed.")
-                            end
-                          end
-                        end
+                      default_source_code:
+                        filename: /etc/envoy/filter.lua
                   - name: envoy.filters.http.router
                     typed_config:
                       '@type': type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
